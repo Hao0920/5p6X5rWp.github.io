@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>代码雨效果 | 你的名字</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        canvas {
+            background: #000;
+        }
+        /* 可选：添加内容容器 */
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0f0;
+            text-align: center;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- 网站内容 -->
+    <div class="content">
+        <h1>你的名字</h1>
+        <p>Welcome to my Matrix</p>
+    </div>
+
+    <!-- 代码雨画布 -->
+    <canvas id="matrix"></canvas>
+
+    <script>
+        // 初始化画布
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        // 设置全屏尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 字符配置
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const fontSize = 20;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        // 绘制函数
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0f0';  // 经典绿色
+            ctx.font = fontSize + 'px monospace';
+
+            drops.forEach((drop, i) => {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(char, i * fontSize, drop * fontSize);
+
+                if (drop * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            });
+        }
+
+        // 动画循环
+        setInterval(draw, 50);
+    </script>
+</body>
+</html>
